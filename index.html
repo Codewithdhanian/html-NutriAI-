@@ -1,0 +1,364 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NutriAI - Personalized Nutrition Platform</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <div class="container">
+            <nav class="navbar">
+                <div class="logo">
+                    <i class="fas fa-dna"></i>
+                    <span>NutriAI</span>
+                </div>
+                <ul class="nav-links">
+                    <li><a href="#" onclick="showSection('home')">Home</a></li>
+                    <li><a href="#" onclick="showSection('dashboard')">Dashboard</a></li>
+                    <li><a href="#" onclick="showSection('meal-planner')">Meal Planner</a></li>
+                    <li><a href="#" onclick="showSection('food-logger')">Food Logger</a></li>
+                    <li><a href="#" onclick="showSection('insights')">Insights</a></li>
+                </ul>
+                <div class="auth-buttons">
+                    <button class="btn btn-primary" onclick="openModal('signup-modal')">Get Started</button>
+                </div>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Home Section -->
+    <section id="home" class="hero">
+        <div class="container">
+            <div class="hero-content">
+                <h1>Your Personal Nutrition Scientist</h1>
+                <p>AI-powered personalized nutrition based on your DNA, biomarkers, and lifestyle. Get meal plans tailored to your unique biology.</p>
+                <div class="hero-btns">
+                    <button class="btn btn-primary" onclick="openModal('signup-modal')">Start Free Trial</button>
+                    <button class="btn btn-secondary">Learn More</button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section class="features">
+        <div class="container">
+            <div class="section-title">
+                <h2>How NutriAI Works</h2>
+                <p>Our AI analyzes multiple data points to create your perfect nutrition plan</p>
+            </div>
+            <div class="features-grid">
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-dna"></i>
+                    </div>
+                    <h3>DNA-Based Personalization</h3>
+                    <p>Analyze genetic markers for lactose intolerance, caffeine metabolism, optimal macros, and nutrient absorption.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-heartbeat"></i>
+                    </div>
+                    <h3>Real-Time Biomarker Tracking</h3>
+                    <p>Connect wearables to monitor blood glucose, sleep patterns, activity levels, and more for dynamic adjustments.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-utensils"></i>
+                    </div>
+                    <h3>AI-Powered Meal Planning</h3>
+                    <p>Get personalized meal recommendations that consider your preferences, schedule, and nutritional needs.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Dashboard Section -->
+    <section id="dashboard" class="dashboard">
+        <div class="container">
+            <div class="dashboard-header">
+                <div class="welcome-message">
+                    <h1 id="welcome-text">Welcome back, Alex!</h1>
+                    <p>Here's your personalized nutrition overview for today</p>
+                </div>
+                <div class="date-display" id="current-date"></div>
+            </div>
+
+            <div class="dashboard-grid">
+                <!-- Nutrition Targets -->
+                <div class="dashboard-card">
+                    <div class="card-header">
+                        <h3>Daily Nutrition Targets</h3>
+                        <i class="fas fa-bullseye"></i>
+                    </div>
+                    <div class="targets-grid">
+                        <div class="target-item">
+                            <div class="target-value" id="calories-target">2,200</div>
+                            <div class="target-label">Calories</div>
+                        </div>
+                        <div class="target-item">
+                            <div class="target-value" id="protein-target">165g</div>
+                            <div class="target-label">Protein</div>
+                        </div>
+                        <div class="target-item">
+                            <div class="target-value" id="carbs-target">220g</div>
+                            <div class="target-label">Carbs</div>
+                        </div>
+                        <div class="target-item">
+                            <div class="target-value" id="fats-target">73g</div>
+                            <div class="target-label">Fats</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Water Tracker -->
+                <div class="dashboard-card">
+                    <div class="card-header">
+                        <h3>Water Intake Tracker</h3>
+                        <i class="fas fa-tint"></i>
+                    </div>
+                    <div class="water-tracker">
+                        <div class="water-goal">Goal: <span id="water-goal">2.5</span> liters</div>
+                        <div class="water-cups" id="water-cups-container"></div>
+                        <button class="btn btn-primary" onclick="logWater()">Log 250ml</button>
+                    </div>
+                </div>
+
+                <!-- Today's Meals -->
+                <div class="dashboard-card">
+                    <div class="card-header">
+                        <h3>Today's Recommended Meals</h3>
+                        <i class="fas fa-utensils"></i>
+                    </div>
+                    <div id="todays-meals"></div>
+                </div>
+
+                <!-- Progress Chart -->
+                <div class="dashboard-card">
+                    <div class="card-header">
+                        <h3>Weekly Nutrition Progress</h3>
+                        <i class="fas fa-chart-line"></i>
+                    </div>
+                    <div class="chart-container">
+                        <canvas id="progress-chart"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Meal Planner Section -->
+    <section id="meal-planner" class="meal-planner">
+        <div class="container">
+            <div class="dashboard-header">
+                <div class="welcome-message">
+                    <h1>AI Meal Planner</h1>
+                    <p>Your personalized meal plan for the week</p>
+                </div>
+                <button class="btn btn-primary" onclick="generateMealPlan()">
+                    <i class="fas fa-robot"></i> Generate New Plan
+                </button>
+            </div>
+
+            <div id="meal-plan-container"></div>
+        </div>
+    </section>
+
+    <!-- Food Logger Section -->
+    <section id="food-logger" class="food-logger">
+        <div class="container">
+            <div class="dashboard-header">
+                <div class="welcome-message">
+                    <h1>Food & Symptom Logger</h1>
+                    <p>Track what you eat and how you feel to discover patterns</p>
+                </div>
+            </div>
+
+            <div class="log-container">
+                <div class="search-container">
+                    <i class="fas fa-search search-icon"></i>
+                    <input type="text" class="search-input" id="food-search" placeholder="Search for food or scan barcode..." onkeyup="searchFood()">
+                    <button class="btn btn-outline" onclick="simulateBarcodeScan()" style="margin-left: 10px;">
+                        <i class="fas fa-camera"></i> Scan
+                    </button>
+                </div>
+                <div class="food-results" id="food-results"></div>
+
+                <div class="form-group">
+                    <label for="symptom-select">How do you feel after eating?</label>
+                    <select class="form-control" id="symptom-select">
+                        <option value="">Select symptom or feeling</option>
+                        <option value="energy-high">High Energy</option>
+                        <option value="energy-low">Low Energy</option>
+                        <option value="bloating">Bloating</option>
+                        <option value="satiated">Satiated</option>
+                        <option value="hungry">Still Hungry</option>
+                        <option value="digestion-good">Good Digestion</option>
+                        <option value="digestion-poor">Poor Digestion</option>
+                    </select>
+                </div>
+
+                <button class="btn btn-primary" onclick="logFood()">
+                    <i class="fas fa-plus"></i> Add to Food Log
+                </button>
+            </div>
+
+            <div class="dashboard-card">
+                <div class="card-header">
+                    <h3>Today's Food Log</h3>
+                    <i class="fas fa-history"></i>
+                </div>
+                <div id="food-log-container"></div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Insights Section -->
+    <section id="insights" class="insights">
+        <div class="container">
+            <div class="insights-hero">
+                <h2>Your Personalized Nutrition Insights</h2>
+                <p>AI-powered analysis of your unique data patterns</p>
+            </div>
+
+            <div class="insights-grid" id="insights-container"></div>
+
+            <div class="dashboard-header" style="margin-top: 50px;">
+                <div class="welcome-message">
+                    <h3>Export Your Data</h3>
+                    <p>Download your nutrition data for sharing with healthcare providers</p>
+                </div>
+                <button class="btn btn-secondary" onclick="exportData()">
+                    <i class="fas fa-download"></i> Export Data
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Signup Modal -->
+    <div id="signup-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Create Your NutriAI Profile</h3>
+                <button class="close-modal" onclick="closeModal()">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form id="signup-form" onsubmit="saveUserProfile(event)">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="name">Full Name</label>
+                            <input type="text" id="name" class="form-control" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="age">Age</label>
+                            <input type="number" id="age" class="form-control" min="18" max="100" required>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="gender">Gender</label>
+                        <select id="gender" class="form-control" required>
+                            <option value="">Select</option>
+                            <option value="male">Male</option>
+                            <option value="female">Female</option>
+                            <option value="other">Other</option>
+                        </select>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="weight">Weight (kg)</label>
+                            <input type="number" id="weight" class="form-control" step="0.1" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="height">Height (cm)</label>
+                            <input type="number" id="height" class="form-control" required>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="activity">Activity Level</label>
+                        <select id="activity" class="form-control" required>
+                            <option value="">Select</option>
+                            <option value="sedentary">Sedentary</option>
+                            <option value="light">Lightly Active</option>
+                            <option value="moderate">Moderately Active</option>
+                            <option value="active">Very Active</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="goal">Primary Health Goal</label>
+                        <select id="goal" class="form-control" required>
+                            <option value="">Select</option>
+                            <option value="weight-loss">Weight Loss</option>
+                            <option value="muscle-gain">Muscle Gain</option>
+                            <option value="maintenance">Maintenance</option>
+                            <option value="wellness">Wellness</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Dietary Restrictions</label>
+                        <div class="checkbox-group">
+                            <label><input type="checkbox" name="restrictions" value="vegetarian"> Vegetarian</label>
+                            <label><input type="checkbox" name="restrictions" value="vegan"> Vegan</label>
+                            <label><input type="checkbox" name="restrictions" value="gluten-free"> Gluten-Free</label>
+                            <label><input type="checkbox" name="restrictions" value="dairy-free"> Dairy-Free</label>
+                            <label><input type="checkbox" name="restrictions" value="nut-free"> Nut-Free</label>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="allergies">Food Allergies</label>
+                        <input type="text" id="allergies" class="form-control" placeholder="e.g., shellfish, peanuts">
+                    </div>
+
+                    <button type="submit" class="btn btn-primary btn-block">
+                        Create My AI Nutrition Plan
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h3>NutriAI</h3>
+                    <p>AI-powered personalized nutrition for optimal health and wellness.</p>
+                </div>
+                <div class="footer-section">
+                    <h3>Quick Links</h3>
+                    <ul class="footer-links">
+                        <li><a href="#" onclick="showSection('home')">Home</a></li>
+                        <li><a href="#" onclick="showSection('dashboard')">Dashboard</a></li>
+                        <li><a href="#" onclick="showSection('meal-planner')">Meal Planner</a></li>
+                        <li><a href="#" onclick="showSection('food-logger')">Food Logger</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h3>Contact</h3>
+                    <ul class="footer-links">
+                        <li><a href="mailto:support@nutriai.com">support@nutriai.com</a></li>
+                        <li><a href="#">Privacy Policy</a></li>
+                        <li><a href="#">Terms of Service</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="copyright">
+                <p>&copy; 2023 NutriAI. All rights reserved. This is a demonstration project.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>
